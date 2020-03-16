@@ -1,0 +1,171 @@
+= RESTful Notes API Guide
+Depanker Sharma
+:doctype: book
+:compat-mode:
+:page-layout!:
+:toc: right
+:toclevels: 2
+:sectanchors:
+:sectlinks:
+:sectnums:
+:linkattrs:
+:source-highlighter: coderay
+
+
+[[overview]]
+= Overview
+__These are the API's to facailtate currency exchange. __
+
+[[overview-general]]
+== General
+
+[[overview-http-verbs]]
+=== HTTP verbs
+
+|===
+| Verb | Usage
+
+| `GET`
+| Used to retrieve a resource (idempotent)
+
+| `POST`
+| Used to create a new resource
+
+| `PUT`
+| Used to update an existing resource (idempotent)
+
+| `DELETE`
+| Used to delete an existing resource
+|===
+
+[[overview-http-status-codes]]
+== HTTP status codes
+
+RESTful notes tries to adhere as closely as possible to standard HTTP and REST conventions in its
+use of HTTP status codes.
+
+|===
+| Status code | Usage
+
+| `200 OK`
+| The request completed successfully
+
+| `202 Accepted`
+| The request has been accepted for processing, but the processing has not been completed. The request might or might not be eventually acted upon, and may be disallowed when processing occurs.
+
+| `204 No Content`
+| An update to an existing resource has been applied successfully
+
+| `400 Bad Request`
+| The request was malformed. The response body will include an error providing further information
+
+| `404 Not Found`
+| The requested resource did not exist
+
+| `409 Not Found`
+| Attempt to create a duplicate resource
+
+| `500 Internal server error`
+| Any Unhandled
+
+| `502 Bad Gateway`
+| When and external service fails
+|===
+
+[[overview-errors]]
+== Errors
+
+Whenever an error response (status code >= 400) is returned, the body will contain a JSON object
+that describes the problem. The error object has the following structure:
+
+[source,http,options="nowrap"]
+----
+HTTP/1.1 400 Bad Request
+Content-Type: application/json;charset=UTF-8
+Content-Length: 62
+
+[ {
+  "field" : "fieldName",
+  "message" : "Error message"
+} ]
+----
+[[how_to_run]]
+= How to run the software
+To run the software, use the terminal, `cd` to `currencyconverter`
+type `./gradlew clean  build`. After the process gets successfully competed
+a jar `currencyconverter-0.0.1-SNAPSHOT.jar` will get created under build/libs directory
+Now there are two ways to run the jar
+
+====== 1. Execute `java -jar build/libs/currencyconverter-0.0.1-SNAPSHOT.jar`. Once the jar is up, below mentioned curl request's could be used as test cases.
+====== 2. Alternatively if docker is installed on the system following command can start the application as Docker container
+2.1 Build the docker image `docker build -t depanker/demo-currency-converter .` or pull the image from dockerhub using `docker pull depanker/demo-currency-converter`
+
+2.2 Once the above command has been successfully installed, execute the following `docker run -p 8080:8080 -t depanker/demo-currency-converter`
+
+[[resources]]
+= Resources
+include::currenct-converter.adoc[]
+
+[[bonus]]
+= Bonus Tasks
+###  How to secure API endpoint
+
+#### JWT is the most common authencation menchanism in API's. If required by a vendor
+we can secure a API using JWT and also set an expery to the token.
+It would also mean that we would need an api where the client can regenerate the tokens.
+
+We would also need to make sure that we use SSL as JWT will only
+mitigate the Attack on data integrity but not on confidentiality.
+
+When communicating server to server, security could be managed by whitelisting IP's
+
+###  How to improve API's performance:
+
+####  _Internal caching vs External caching_
+
+##### Internal caching:
+###### Pros:
+1. Can be easily implemented using a spring scheduler.
+
+2. Do not require any object Serialization or Deserialization.
+
+3. Not dependent on any network connection as the data resides in JVM heap.
+
+4. A secure API endpoint could be exposed, which when invoked reloads the cache.
+
+###### Cons:
+1. Data is tightly bound to the application and not abstracted to
+an external data source.
+
+2.a In a production setup where multiple servers are running, there is no
+clean way to refresh the cache.
+
+##### Internal caching:
+###### Pros:
+1. Central cache ensures that update one location will reflect everywhere.
+
+2. Provides more control over the change, example if we have stored the data in
+Redis cache as a Hash data structure we can directly update one single value,
+without needing to update the entire cache.
+
+###### Cons:
+1. Adds a network overhead, can be very little but still an overhead.
+
+2. Prone to network failures.
+
+3. Added cost of object Serialization and Deserialization.
+
+4. Additional infrastructure cost.
+
+####  _This functionality could be exposed to a severless architecture._
+###### Pros:
+1. Lower costing is achieved as there is no managing of servers.
+
+2. Elasticity is managed by the vendor.
+
+###### Cons:
+1. Cold start creates an overhead but can be managed by repeatedly hitting the service within a given interval,
+it will still cost less.
+
+
+:last-update-label!:

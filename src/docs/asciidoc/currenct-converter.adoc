@@ -1,0 +1,17 @@
+====== Request
+include::{snippets}/conversionResponse/curl-request.adoc[]
+====== Response
+include::{snippets}/conversionResponse/http-response.adoc[]
+
+==== Error
+====== Request when not data is present
+include::{snippets}/conversionBadRequestNullValuesResponse/curl-request.adoc[]
+====== Response
+include::{snippets}/conversionBadRequestNullValuesResponse/http-response.adoc[]
+====== Request with invalid values
+include::{snippets}/conversionBadRequestInvalidValuesResponse/curl-request.adoc[]
+====== Response
+include::{snippets}/conversionBadRequestInvalidValuesResponse/http-response.adoc[]
+====== When both the external services fail
+====== Response
+include::{snippets}/getErrorRequest/http-response.adoc[]
