@@ -21,6 +21,8 @@ dependencies {
 	testImplementation('org.springframework.boot:spring-boot-starter-test') {
 		exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
 	}
+	// https://mvnrepository.com/artifact/io.projectreactor.tools/blockhound
+	implementation group: 'io.projectreactor.tools', name: 'blockhound', version: '1.0.2.RELEASE'
 	testImplementation 'io.projectreactor:reactor-test'
 	testImplementation 'org.springframework.restdocs:spring-restdocs-webtestclient'
 	asciidoctor 'org.springframework.restdocs:spring-restdocs-asciidoctor:{project-version}'
