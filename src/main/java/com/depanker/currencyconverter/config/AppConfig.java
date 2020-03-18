@@ -12,16 +12,16 @@ import java.util.List;
 @Configuration
 @Slf4j
 public class AppConfig {
-//    @Value("${application.webclient:https://api.exchangeratesapi.io,https://api.exchangerate-api.com/v4/latest}")
-//    List<String> services;
+    @Value("${application.webclient}")
+    List<String> services;
 
     @Bean("webClient")
     @Primary
     public WebClient webClient() {
-        return WebClient.create("https://api.exchangeratesapi.io");
+        return WebClient.create(services.get(0));
     }
     @Bean("alternativeWebClient")
     public WebClient alternativeWebClient() {
-        return WebClient.create("https://api.exchangerate-api.com/v4/latest");
+        return WebClient.create(services.get(0));
     }
 }
