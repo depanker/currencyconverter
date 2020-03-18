@@ -29,6 +29,11 @@ public class CurrencyExchangeImpl implements CurrencyExchange {
 
     @Override
     public Mono<ExchangeRatesData> getConversionAmount(ConversionRequest conversionRequest) {
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
         return webClient.get().uri(PRIMARY_RESOURCE, conversionRequest.getFrom())
                 .retrieve()
                 .bodyToMono(ExchangeRates.class)
