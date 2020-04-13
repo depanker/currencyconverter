@@ -58,7 +58,7 @@ publishing {
 	}
 }
 artifactory {
-	contextUrl = 'http://172.17.0.2:8081/artifactory'
+	contextUrl = 'http://localhost:8081/artifactory'
 	publish {
 		repository {
 			repoKey = 'gradle-release-local'
