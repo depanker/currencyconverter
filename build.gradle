@@ -3,6 +3,8 @@ plugins {
 	id 'io.spring.dependency-management' version '1.0.9.RELEASE'
 	id 'org.asciidoctor.convert' version '1.5.8'
 	id 'java'
+	id 'maven-publish'
+	id "com.jfrog.artifactory" version '3.1.1'
 }
 
 group = 'com.depanker'
@@ -27,6 +29,7 @@ dependencies {
 	testImplementation 'com.squareup.okhttp3:okhttp:4.4.0'
 	testImplementation 'com.squareup.okhttp3:mockwebserver:4.4.0'
 }
+
 ext {
 	set('snippetsDir', file("build/generated-snippets"))
 }
@@ -39,4 +42,21 @@ test {
 asciidoctor {
 	inputs.dir snippetsDir
 	dependsOn test
+}
+artifactory {
+	contextUrl = 'http://172.17.0.2:8081/artifactory'
+	publish {
+		repository {
+			repoKey = 'gradle-release-local'
+			username = 'admin'
+			password = 'admin@123'
+		}
+	}
+	resolve {
+		repository {
+			repoKey = 'repo'
+			username = 'admin'
+			password = 'admin@123'
+		}
+	}
 }
