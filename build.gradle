@@ -8,25 +8,12 @@ plugins {
 }
 
 
-configurations {
-	[apiElements, runtimeElements].each {
-		it.outgoing.artifacts.removeIf { it.buildDependencies.getDependencies(null).contains(jar) }
-		it.outgoing.artifact(bootJar)
-	}
-}
 group = 'com.depanker'
 version = '0.0.1-SNAPSHOT'
 sourceCompatibility = '11'
 targetCompatibility = '11'
 repositories {
 	mavenCentral()
-}
-configurations {
-	[apiElements, runtimeElements].each {
-		it.outgoing.artifacts.removeIf {
-			it.buildDependencies.getDependencies(null).contains(jar) }
-		it.outgoing.artifact(bootJar)
-	}
 }
 
 dependencies {
@@ -59,21 +46,7 @@ asciidoctor {
 
 artifactory {
 	contextUrl = 'http://localhost:8081/artifactory'
-	configurations {
-		[apiElements, runtimeElements].each {
-			it.outgoing.artifacts.removeIf {
-				it.buildDependencies.getDependencies(null).contains(jar) }
-			it.outgoing.artifact(bootJar)
-		}
-	}
 	publish {
-		configurations {
-			[apiElements, runtimeElements].each {
-				it.outgoing.artifacts.removeIf {
-					it.buildDependencies.getDependencies(null).contains(jar) }
-				it.outgoing.artifact(bootJar)
-			}
-		}
 		repository {
 			repoKey = 'gradle-release-local'
 			username = 'admin'
@@ -87,7 +60,7 @@ artifactory {
 			publications('mavenJava')
 			publishArtifacts = true
 			// Properties to be attached to the published artifacts.
-//			properties = ['qa.level': 'basic', 'dev.team' : 'core']
+			properties = ['qa.level': 'basic', 'dev.team' : 'core']
 			// Publish generated POM files to Artifactory (true by default)
 			publishPom = true
 		}
@@ -123,15 +96,6 @@ publishing {
 					fromResolutionResult()
 				}
 			}
-		}
-	}
-}
-
-artifactoryPublish {
-	configurations {
-		[apiElements, runtimeElements].each {
-			it.outgoing.artifacts.removeIf { it.buildDependencies.getDependencies(null).contains(jar) }
-			it.outgoing.artifact(bootJar)
 		}
 	}
 }
