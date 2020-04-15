@@ -70,6 +70,7 @@ artifactory {
 		maven = true
 	}
 }
+//Required by Gradle 6 to publish spring boot jar
 task sourceJar(type: Jar) {
 	from sourceSets.main.allJava
 	archiveClassifier = "sources"
@@ -78,6 +79,9 @@ task sourceJar(type: Jar) {
 publishing {
 	publications {
 		mavenJava(MavenPublication) {
+//			This below commented code will publish *.module and *-sources.jar
+//			When commented only *.pom and *.jar will be published
+			/*
 			configurations {
 				[apiElements, runtimeElements].each {
 					it.outgoing.artifacts.removeIf {
@@ -86,6 +90,8 @@ publishing {
 				}
 			}
 			from components.java
+			 */
+			//Required by Gradle 6 to publish spring boot jar
 			artifact sourceJar
 
 			versionMapping {
